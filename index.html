@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>علوم وتكنولوجيا الليزر | المختبر الافتراضي التفاعلي – الجامعة التكنولوجية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Cairo:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div class="app-container" id="app">
+
+    <!-- ══════════════════════════════════════════════════════════
+         HEADER BAR
+    ══════════════════════════════════════════════════════════ -->
+    <header class="app-header" id="app-header">
+
+      <!-- Brand -->
+      <div class="header-brand">
+        <div class="brand-crest">
+          <div class="crest-ring"></div>
+          <span class="crest-text">UOT</span>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title" data-i18n="platformTitle">علوم وتكنولوجيا الليزر</div>
+          <div class="brand-sub" data-i18n="platformSubtitle">المختبر الافتراضي التفاعلي</div>
+        </div>
+      </div>
+
+      <!-- Center Controls -->
+      <div class="header-center">
+        <button class="btn-primary" id="btn-experiments" title="Open Experiment Library">
+          <span data-i18n="btnExperiments">🔬 التجارب المخبرية (100)</span>
+        </button>
+        <button class="btn-secondary" id="btn-free-lab" title="Free Sandbox Mode">
+          <span data-i18n="btnFreeLab">🧪 تجربة حرة</span>
+        </button>
+        <div class="view-mode-toggle">
+          <button class="btn-mode active" id="btn-mode-2d" title="Two-Dimensional Optical Bench">2D</button>
+          <button class="btn-mode" id="btn-mode-3d" title="Three-Dimensional WebGL Laboratory">3D</button>
+        </div>
+        <div class="quick-select-wrap">
+          <button class="hbtn hbtn-nav" id="btn-head-prev" title="التجربة السابقة">‹</button>
+          <select id="quick-select" class="quick-select">
+            <option value="" data-i18n-attr="quickSelectPlaceholder">-- اختر التجربة --</option>
+          </select>
+          <button class="hbtn hbtn-nav" id="btn-head-next" title="التجربة التالية">›</button>
+        </div>
+      </div>
+
+      <!-- Tools Bar -->
+      <div class="header-tools">
+        <div class="tool-group">
+          <button class="hbtn" id="btn-undo" title="Undo (Ctrl+Z)" data-i18n="btnUndo">↩</button>
+          <button class="hbtn" id="btn-redo" title="Redo (Ctrl+Y)" data-i18n="btnRedo">↪</button>
+        </div>
+        <div class="tool-sep"></div>
+        <div class="tool-group">
+          <button class="hbtn" id="btn-clear" title="Clear Canvas" data-i18n="btnClear">🗑</button>
+          <button class="hbtn" id="btn-save" title="Save JSON" data-i18n="btnSave">💾</button>
+          <button class="hbtn" id="btn-load" title="Load JSON" data-i18n="btnLoad">📂</button>
+          <input type="file" id="file-input" accept=".json" style="display:none">
+        </div>
+        <div class="tool-sep"></div>
+        <div class="tool-group">
+          <button class="hbtn" id="btn-export-png" title="Export PNG" data-i18n="btnExportPNG">🖼</button>
+          <button class="hbtn" id="btn-export-pdf" title="PDF Report" data-i18n="btnExportPDF">📄</button>
+        </div>
+        <div class="tool-sep"></div>
+        <div class="tool-group">
+          <button class="hbtn" id="btn-theme" title="Toggle Dark/Light Theme" data-i18n="btnTheme">🌙</button>
+          <button class="hbtn" id="btn-fullscreen" title="Fullscreen" data-i18n="btnFullscreen">⛶</button>
+          <button class="hbtn hbtn-lang" id="btn-lang" title="Toggle Language">English</button>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- ══════════════════════════════════════════════════════════
+         WORKSPACE BODY
+    ══════════════════════════════════════════════════════════ -->
+    <div class="workspace-body">
+
+      <!-- ─── LEFT SIDEBAR: Optical Components ─── -->
+      <aside class="sidebar-left" id="sidebar-left">
+
+        <div class="sidebar-header">
+          <span data-i18n="toolDrawerTitle">العناصر البصرية</span>
+          <button class="sidebar-pin-btn" id="btn-toggle-left" title="Collapse Sidebar">◀</button>
+        </div>
+
+        <div class="sidebar-scroll">
+
+          <!-- Light Sources -->
+          <div class="accordion-section open" data-cat="sources">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">💡</span>
+              <span data-i18n="categorySources">مصادر الضوء</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body">
+              <div class="comp-card" draggable="true" data-type="laser" data-subtype="red"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)"
+                   title="Red Laser 650nm">
+                <div class="comp-icon" style="background:#ef4444;"></div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolLaserRed">ليزر أحمر 650nm</div>
+                  <div class="comp-desc" data-i18n="toolLaserDesc">حزمة ليزرية متوازية أحادية اللون</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="laser" data-subtype="green"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)"
+                   title="Green Laser 532nm">
+                <div class="comp-icon" style="background:#22c55e;"></div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolLaserGreen">ليزر أخضر 532nm</div>
+                  <div class="comp-desc" data-i18n="toolLaserDesc">حزمة ليزرية متوازية أحادية اللون</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="laser" data-subtype="violet"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)"
+                   title="Violet Laser 405nm">
+                <div class="comp-icon" style="background:#a855f7;"></div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolLaserViolet">ليزر بنفسجي 405nm</div>
+                  <div class="comp-desc" data-i18n="toolLaserDesc">حزمة ليزرية متوازية أحادية اللون</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="white_light" data-subtype="white_light"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)"
+                   title="White Light Source">
+                <div class="comp-icon" style="background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f);"></div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolWhiteLight">مصدر ضوء أبيض</div>
+                  <div class="comp-desc" data-i18n="toolWhiteLightDesc">طيف عريض 400-700nm</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mirrors -->
+          <div class="accordion-section" data-cat="mirrors">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">🪞</span>
+              <span data-i18n="categoryMirrors">المرايا ومجزئات الحزمة</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body" style="display:none">
+              <div class="comp-card" draggable="true" data-type="mirror" data-subtype="plane"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon mirror-icon">━</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolPlaneMirror">مرآة مستوية</div>
+                  <div class="comp-desc" data-i18n="toolPlaneMirrorDesc">انعكاس مثالي 100%</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="mirror" data-subtype="concave"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon mirror-icon">⌣</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolConcaveMirror">مرآة مقعرة</div>
+                  <div class="comp-desc" data-i18n="toolConcaveMirrorDesc">تجميع الأشعة</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="mirror" data-subtype="convex"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon mirror-icon">⌢</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolConvexMirror">مرآة محدبة</div>
+                  <div class="comp-desc" data-i18n="toolConvexMirrorDesc">تفريق الأشعة</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="mirror" data-subtype="partial"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon mirror-icon" style="opacity:0.5;">━</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolBeamSplitter">مجزئ حزمة</div>
+                  <div class="comp-desc" data-i18n="toolBeamSplitterDesc">50/50 انعكاس ونفاذ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lenses -->
+          <div class="accordion-section" data-cat="lenses">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">🔍</span>
+              <span data-i18n="categoryLenses">العدسات البصرية</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body" style="display:none">
+              <div class="comp-card" draggable="true" data-type="lens" data-subtype="convex"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon lens-icon">⊕</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolConvexLens">عدسة محدبة الوجهين</div>
+                  <div class="comp-desc" data-i18n="toolConvexLensDesc">بعد بؤري موجب</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="lens" data-subtype="concave"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon lens-icon">⊖</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolConcaveLens">عدسة مقعرة الوجهين</div>
+                  <div class="comp-desc" data-i18n="toolConcaveLensDesc">بعد بؤري سالب</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="lens" data-subtype="plano-convex"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon lens-icon">⊏</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolPlanoConvex">عدسة مستوية محدبة</div>
+                  <div class="comp-desc" data-i18n="toolPlanoConvexDesc">وجه مستوٍ ووجه مقوس</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="lens" data-subtype="plano-concave"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon lens-icon">⊐</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolPlanoConcave">عدسة مستوية مقعرة</div>
+                  <div class="comp-desc" data-i18n="toolPlanoConcaveDesc">وجه مستوٍ ووجه مقعر</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="lens" data-subtype="cylindrical"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon lens-icon">⊗</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolCylindricalLens">عدسة أسطوانية</div>
+                  <div class="comp-desc" data-i18n="toolCylindricalLensDesc">تجميع خطي البعد</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prisms -->
+          <div class="accordion-section" data-cat="prisms">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">🔺</span>
+              <span data-i18n="categoryPrisms">المناشير الهندسية</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body" style="display:none">
+              <div class="comp-card" draggable="true" data-type="prism" data-subtype="triangular"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon prism-icon">▲</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolTriangularPrism">منشور ثلاثي</div>
+                  <div class="comp-desc" data-i18n="toolTriangularPrismDesc">تشتت طيفي (كوشي)</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="prism" data-subtype="rectangular"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon prism-icon">▬</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolRectangularPrism">كتلة مستطيلة</div>
+                  <div class="comp-desc" data-i18n="toolRectangularPrismDesc">وسط كاسر مستطيل</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="prism" data-subtype="pentagonal"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon prism-icon">⬠</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolPentagonalPrism">منشور خماسي</div>
+                  <div class="comp-desc" data-i18n="toolPentagonalPrismDesc">منشور بصري خماسي</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Media -->
+          <div class="accordion-section" data-cat="media">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">🌊</span>
+              <span data-i18n="categoryMedia">الأوساط المادية</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body" style="display:none">
+              <div class="comp-card" draggable="true" data-type="medium" data-subtype="glass"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon medium-icon" style="background:rgba(99,215,255,0.2);border:1px solid rgba(99,215,255,0.5);">n</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolRefractiveMedium">وسط كاسر</div>
+                  <div class="comp-desc" data-i18n="toolRefractiveMediumDesc">معامل انكسار n</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="medium" data-subtype="absorbing"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon medium-icon" style="background:rgba(100,100,100,0.3);border:1px solid #555;">α</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolAbsorbingMedium">وسط ممتص</div>
+                  <div class="comp-desc" data-i18n="toolAbsorbingMediumDesc">قانون بير-لامبرت</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="fiber" data-subtype="fiber"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)" title="Optical Fiber Cable">
+                <div class="comp-icon fiber-icon" style="background:#f59e0b;color:#1e293b;font-weight:bold;">➰</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolFiber">الكيبل الضوئي</div>
+                  <div class="comp-desc" data-i18n="toolFiberDesc">دليل موجي TIR</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diffraction & Slits -->
+          <div class="accordion-section" data-cat="diffraction">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">〰</span>
+              <span data-i18n="categoryDiffraction">الحيود والشقوق</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body" style="display:none">
+              <div class="comp-card" draggable="true" data-type="grating" data-subtype="grating"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon diff-icon">≡</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolGrating">محزوز حيود</div>
+                  <div class="comp-desc" data-i18n="toolGratingDesc">رتب الحيود الطيفية</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="single_slit" data-subtype="single_slit"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon diff-icon">⌃</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolSingleSlit">شق مفرد</div>
+                  <div class="comp-desc" data-i18n="toolSingleSlitDesc">حيود فرانهوفر</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="double_slit" data-subtype="double_slit"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon diff-icon">⌃⌃</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolDoubleSlit">شق مزدوج (يونغ)</div>
+                  <div class="comp-desc" data-i18n="toolDoubleSlitDesc">تداخل الشق المزدوج</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="aperture" data-subtype="aperture"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon diff-icon">◎</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolAperture">فتحة دائرية</div>
+                  <div class="comp-desc" data-i18n="toolApertureDesc">قرص آيري</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Measurement -->
+          <div class="accordion-section" data-cat="tools">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+              <span class="acc-icon">📏</span>
+              <span data-i18n="categoryTools">القياس والكواشف</span>
+              <span class="acc-arrow">▾</span>
+            </div>
+            <div class="accordion-body" style="display:none">
+              <div class="comp-card" draggable="true" data-type="detector" data-subtype="detector"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon tool-icon">📡</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolDetector">كاشف ضوئي</div>
+                  <div class="comp-desc" data-i18n="toolDetectorDesc">مقياس قدرة (mW)</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="screen" data-subtype="screen"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon tool-icon">🖥</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolScreen">شاشة رصد</div>
+                  <div class="comp-desc" data-i18n="toolScreenDesc">عرض البقع والأهداب</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="ruler" data-subtype="ruler"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon tool-icon">📏</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolRuler">مسطرة بصرية</div>
+                  <div class="comp-desc" data-i18n="toolRulerDesc">قياس المسافات (mm/cm)</div>
+                </div>
+              </div>
+              <div class="comp-card" draggable="true" data-type="protractor" data-subtype="protractor"
+                   ondragstart="dragStart(event)" onclick="clickAdd(event)">
+                <div class="comp-icon tool-icon">📐</div>
+                <div class="comp-info">
+                  <div class="comp-name" data-i18n="toolProtractor">منقلة دائرية</div>
+                  <div class="comp-desc" data-i18n="toolProtractorDesc">قياس الزوايا (0°-180°)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- .sidebar-scroll -->
+      </aside>
+
+      <!-- ─── CANVAS WRAPPER ─── -->
+      <div class="canvas-wrapper" id="canvas-wrapper">
+
+        <!-- Drop overlay instruction -->
+        <div class="drop-hint" id="drop-hint">
+          <span data-i18n="dropHint">اسحب عنصراً من الشريط الجانبي إلى هنا أو اضغط عليه لإضافته</span>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════
+             FLOATING SCIENTIFIC LAW & EQUATION BOX (مربع قانون التجربة)
+        ══════════════════════════════════════════════════════════ -->
+        <div class="experiment-law-box" id="experiment-law-box">
+          <div class="law-box-header" id="law-box-header">
+            <div class="law-box-meta">
+              <span class="law-tag" id="law-tag">EXP-001</span>
+              <span class="law-cat-badge" id="law-cat-badge">بصريات أساسية</span>
+            </div>
+            <div class="law-box-title" id="law-box-title">قانون الانعكاس الضوئي</div>
+            <div class="law-box-controls">
+              <button class="law-btn" id="btn-fit-view" title="توسيط وعرض التجربة">🎯</button>
+              <button class="law-btn" id="btn-toggle-law" title="تصغير / تكبير مربع القانون">▾</button>
+            </div>
+          </div>
+
+          <div class="law-box-body" id="law-box-body">
+            <!-- Governing Equation (القانون الرياضي الرئيسي) -->
+            <div class="law-equation-card">
+              <div class="law-eq-header">
+                <span class="law-eq-badge">القانون الفيزيائي الأساسي</span>
+                <span class="law-eq-label" id="law-eq-label">Law of Reflection</span>
+              </div>
+              <div class="law-eq-formula" id="law-eq-formula">
+                θ<sub>r</sub> = θ<sub>i</sub>
+              </div>
+              <div class="law-eq-desc" id="law-eq-desc">
+                زاوية السقوط تساوي زاوية الانعكاس، وتقع الأشعة في نفس المستوى.
+              </div>
+            </div>
+
+            <!-- Physical Phenomenon & Objective (الظاهرة والهدف) -->
+            <div class="law-info-grid">
+              <div class="law-info-item">
+                <div class="law-info-label">🎯 الهدف الفيزيائي:</div>
+                <div class="law-info-text" id="law-objective">إثبات تساوي زاويتي السقوط والانعكاس ووقوع الأشعة في مستوى واحد.</div>
+              </div>
+              <div class="law-info-item">
+                <div class="law-info-label">🔬 الظاهرة:</div>
+                <div class="law-info-text" id="law-phenomenon">الانعكاس المنتظم على السطح المستوي.</div>
+              </div>
+            </div>
+
+            <!-- Navigation Controls (التنقل بين التجارب) -->
+            <div class="law-nav-row">
+              <button class="law-nav-btn" id="btn-prev-exp" title="التجربة السابقة">‹ التجربة السابقة</button>
+              <span class="law-nav-indicator" id="law-nav-indicator">تجربة 1 من 100</span>
+              <button class="law-nav-btn" id="btn-next-exp" title="التجربة التالية">التجربة التالية ›</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Canvas -->
+        <canvas id="lab-canvas"></canvas>
+
+        <!-- 3D WebGL Bench Container -->
+        <div id="lab-3d-container" style="display:none; width:100%; height:100%; position:absolute; inset:0;">
+          <div class="hud-3d-controls">
+            <button class="btn-3d-ctrl" id="btn-3d-persp" title="منظور ثلاثي الأبعاد">🎥 منظور 3D</button>
+            <button class="btn-3d-ctrl" id="btn-3d-top" title="مسقط علوي">📐 مسقط علوي</button>
+            <button class="btn-3d-ctrl" id="btn-3d-reset" title="إعادة ضبط الكاميرا">↺ إعادة ضبط</button>
+          </div>
+        </div>
+
+        <!-- Detector readout overlay -->
+        <div class="detector-readout" id="detector-readout" style="display:none">
+          <div class="readout-title">📡 <span data-i18n="toolDetector">كاشف ضوئي</span></div>
+          <div class="readout-value" id="readout-power">– mW</div>
+        </div>
+      </div>
+
+      <!-- ─── RIGHT SIDEBAR: Inspector ─── -->
+      <aside class="sidebar-right" id="sidebar-right">
+
+        <!-- Tab Bar -->
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="properties" data-i18n="tabProperties">الخصائص</button>
+          <button class="tab-btn" data-tab="theory" data-i18n="tabTheory">النظرية</button>
+          <button class="tab-btn" data-tab="quiz" data-i18n="tabQuiz">الاختبار</button>
+          <button class="tab-btn" data-tab="settings" data-i18n="tabSettings">الإعدادات</button>
+        </div>
+
+        <!-- Properties Tab -->
+        <div class="tab-content active" id="tab-properties">
+          <div class="no-selection-msg" id="no-selection-msg">
+            <div class="no-sel-icon">🎯</div>
+            <div data-i18n="noSelectionMsg">اضغط على عنصر في الطاولة لعرض خصائصه هنا</div>
+          </div>
+          <div id="properties-panel" style="display:none">
+            <div class="prop-section-header" id="prop-comp-name">– العنصر</div>
+            <div class="prop-fields" id="prop-fields"></div>
+            <div class="prop-actions">
+              <button class="btn-prop-action btn-duplicate" id="btn-duplicate" data-i18n="btnDuplicate">نسخ العنصر</button>
+              <button class="btn-prop-action btn-delete" id="btn-delete" data-i18n="btnDelete">حذف العنصر</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theory Tab -->
+        <div class="tab-content" id="tab-theory">
+          <div class="theory-placeholder" id="theory-placeholder">
+            <div class="no-sel-icon">📚</div>
+            <div data-i18n="theoryPlaceholder">حمّل تجربة لعرض النظرية والمعادلات</div>
+          </div>
+          <div id="theory-panel" style="display:none"></div>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div class="tab-content" id="tab-quiz">
+          <div class="quiz-placeholder" id="quiz-placeholder">
+            <div class="no-sel-icon">📝</div>
+            <div data-i18n="quizPlaceholder">حمّل تجربة للبدء بالاختبار الذاتي</div>
+          </div>
+          <div id="quiz-panel" style="display:none"></div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div class="tab-content" id="tab-settings">
+          <div class="settings-panel">
+            <div class="settings-section">
+              <div class="settings-title" data-i18n="settingsCanvas">إعدادات الطاولة</div>
+              <label class="setting-row">
+                <span data-i18n="settingGrid">إظهار الشبكة</span>
+                <input type="checkbox" id="set-grid" checked>
+              </label>
+              <label class="setting-row">
+                <span data-i18n="settingSnap">المحاذاة للشبكة</span>
+                <input type="checkbox" id="set-snap">
+              </label>
+              <label class="setting-row">
+                <span data-i18n="settingGridSpacing">تباعد الشبكة</span>
+                <div class="slider-wrap">
+                  <input type="range" id="set-grid-spacing" min="10" max="100" value="25">
+                  <span id="set-grid-spacing-val" class="slider-val">25</span>
+                </div>
+              </label>
+            </div>
+            <div class="settings-section">
+              <div class="settings-title" data-i18n="settingsRay">إعدادات الأشعة</div>
+              <label class="setting-row">
+                <span data-i18n="settingFocalPoints">إظهار البؤر</span>
+                <input type="checkbox" id="set-focal" checked>
+              </label>
+              <label class="setting-row">
+                <span data-i18n="settingNormals">إظهار العوامد</span>
+                <input type="checkbox" id="set-normals">
+              </label>
+              <label class="setting-row">
+                <span data-i18n="settingAngles">إظهار الزوايا</span>
+                <input type="checkbox" id="set-angles">
+              </label>
+              <label class="setting-row">
+                <span data-i18n="settingRayDensity">كثافة الأشعة</span>
+                <div class="slider-wrap">
+                  <input type="range" id="set-ray-density" min="1" max="15" value="4">
+                  <span id="set-ray-density-val" class="slider-val">4</span>
+                </div>
+              </label>
+              <label class="setting-row">
+                <span data-i18n="settingMaxDepth">عمق الانعكاسات</span>
+                <div class="slider-wrap">
+                  <input type="range" id="set-ray-depth" min="3" max="20" value="8">
+                  <span id="set-ray-depth-val" class="slider-val">8</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div><!-- .workspace-body -->
+
+    <!-- ══════════════════════════════════════════════════════════
+         STATUS BAR
+    ══════════════════════════════════════════════════════════ -->
+    <div class="status-bar" id="status-bar">
+      <div class="status-left">
+        <span class="status-item">X: <span id="status-x">0</span> Y: <span id="status-y">0</span></span>
+        <span class="status-sep">|</span>
+        <span class="status-item status-exp-tag" id="status-exp-tag">FREE</span>
+        <span class="status-item" id="status-exp-name" data-i18n="statusFreeMode">تجربة حرة</span>
+        <span class="status-sep">|</span>
+        <span class="status-item"><span id="status-comp-count">0</span> <span data-i18n="statusComponents">عناصر</span></span>
+        <span class="status-sep">|</span>
+        <span class="status-item"><span id="status-ray-count">0</span> <span data-i18n="statusRays">أشعة</span></span>
+      </div>
+      <div class="status-right">
+        <span class="status-item status-developer" id="status-developer">DEVELOPED BY YOUNESS LATEF</span>
+        <span class="status-sep">|</span>
+        <span class="status-item" id="status-fps">60 FPS</span>
+        <span class="status-sep">|</span>
+        <span class="status-item status-brand">الجامعة التكنولوجية – العراق</span>
+      </div>
+    </div>
+
+  </div><!-- .app-container -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       EXPERIMENTS MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div class="modal-overlay" id="exp-modal" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-hdr">
+        <div class="modal-hdr-title" data-i18n="modalExpTitle">مكتبة التجارب (100 تجربة)</div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-controls">
+        <input class="modal-search" id="modal-search" type="text" data-i18n-attr="searchPlaceholder" placeholder="ابحث بالاسم، الرقم، أو الأجهزة...">
+        <select class="modal-filter" id="modal-cat-filter">
+          <option value="" data-i18n="catAll">جميع الفئات (001 - 100)</option>
+          <option value="fundamental" data-i18n="catFundamental">1. البصريات الأساسية (001-015)</option>
+          <option value="wave" data-i18n="catWave">2. البصريات الموجية (016-030)</option>
+          <option value="polarization" data-i18n="catPolarization">3. الاستقطاب (031-040)</option>
+          <option value="laser_physics" data-i18n="catLaserPhysics">4. فيزياء الليزر (041-055)</option>
+          <option value="advanced_laser" data-i18n="catAdvancedLaser">5. الليزر المتقدم (056-065)</option>
+          <option value="nonlinear" data-i18n="catNonlinear">6. البصريات اللاخطية (066-075)</option>
+          <option value="spectroscopy" data-i18n="catSpectroscopy">7. التحليل الطيفي (076-085)</option>
+          <option value="materials" data-i18n="catMaterials">8. تفاعل الليزر-المادة (086-093)</option>
+          <option value="biomedical" data-i18n="catBiomedical">9. التطبيقات الطبية (094-100)</option>
+        </select>
+      </div>
+      <div class="modal-grid" id="modal-exp-grid">
+        <!-- Experiment cards injected here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SCRIPTS — ORDER MATTERS
+  ══════════════════════════════════════════════════════════ -->
+  <script src="js/libs/three.min.js"></script>
+  <script src="js/libs/OrbitControls.js"></script>
+  <script src="js/components/three-bench.js"></script>
+  <script src="js/engine/geometry.js"></script>
+  <script src="js/engine/rayTracer.js"></script>
+  <script src="js/engine/workspaceCanvas.js"></script>
+  <script src="js/data/experiments-catalog.js"></script>
+  <script src="js/i18n/translations.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
